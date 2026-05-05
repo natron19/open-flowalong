@@ -1,0 +1,72 @@
+<%# Page header %>
+<div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+  <div>
+    <h1 class="mb-1"><%= @agenda.title %></h1>
+    <div class="d-flex gap-2">
+      <span class="badge bg-secondary"><%= @brief.audience %></span>
+      <span class="badge bg-secondary"><%= @brief.duration_minutes %> min</span>
+    </div>
+  </div>
+  <div class="d-flex gap-2 flex-wrap">
+    <%= button_to "Regenerate", workshop_brief_agenda_path(@brief),
+        method: :delete,
+        form: { data: { turbo_confirm: "Delete this agenda so you can regenerate it?" } },
+        class: "btn btn-outline-secondary btn-sm" %>
+    <%= link_to "Export / Print", export_workshop_brief_agenda_path(@brief),
+        class: "btn btn-outline-secondary btn-sm", target: "_blank" %>
+    <%= link_to "Back to Brief", workshop_brief_path(@brief),
+        class: "btn btn-outline-secondary btn-sm" %>
+  </div>
+</div>
+
+<p class="text-muted small mb-4">
+  Review this agenda before facilitating. AI-generated timing estimates and activities are a starting point,
+  not expert advice. Adjust sections to fit your specific context.
+</p>
+
+<%# Agenda body — rendered from Markdown %>
+<div class="agenda-body">
+  <% @agenda.body.split(/(?=^## )/m).each do |section| %>
+    <% next if section.strip.empty? %>
+    <%
+      # Parse the ## heading line
+      heading_match = section.match(/\A## (.+)\n/)
+      heading_text  = heading_match ? heading_match[1] : nil
+      time_match    = heading_text&.match(/\A(\d{2}:\d{2})\s+-\s+(.+?)\s+\((\d+)\s+min\)\z/)
+    %>
+
+    <% if time_match %>
+      <%
+        time_str  = time_match[1]
+        title_str = time_match[2]
+        dur_str   = time_match[3]
+        body_text = section.sub(/\A## .+\n/, "").strip
+      %>
+      <div class="card agenda-section-card">
+        <div class="card-header d-flex align-items-center gap-2">
+          <span class="agenda-time-badge"><%= time_str %></span>
+          <strong class="me-auto"><%= title_str %></strong>
+          <span class="badge bg-secondary"><%= dur_str %> min</span>
+        </div>
+        <div class="card-body">
+          <%= render_agenda_markdown(body_text) %>
+        </div>
+      </div>
+    <% else %>
+      <%# Fallback for any non-matching sections %>
+      <div class="mb-3">
+        <%= render_agenda_markdown(section) %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<%# Raw response toggle %>
+<div class="mt-5 pt-3 border-top">
+  <a class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" href="#raw-response" role="button">
+    Show raw Gemini response
+  </a>
+  <div class="collapse mt-3" id="raw-response">
+    <pre class="bg-dark text-light p-3 rounded" style="font-size: 0.8rem; white-space: pre-wrap;"><%= @agenda.gemini_raw %></pre>
+  </div>
+</div>

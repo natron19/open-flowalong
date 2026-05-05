@@ -1,0 +1,66 @@
+<div class="text-center py-5">
+  <h1 class="display-4 fw-bold mb-3">Give it a topic.<br>Get a complete workshop agenda.</h1>
+  <p class="lead text-muted mb-2" style="max-width: 600px; margin: 0 auto;">
+    Designing a facilitated workshop from scratch requires years of experience most people don't have.
+    FlowAlong makes that judgment available in a single form submission.
+  </p>
+  <p class="text-muted mb-5" style="max-width: 600px; margin: 0 auto;">
+    Fill in your brief &mdash; topic, audience, duration, and desired outcome &mdash;
+    and get a structured, timed agenda with facilitator notes and activities, ready to run or adapt.
+  </p>
+  <% if signed_in? %>
+    <%= link_to "Go to My Workshops", workshop_briefs_path, class: "btn btn-accent btn-lg" %>
+  <% else %>
+    <%= link_to "Get started free", sign_up_path, class: "btn btn-accent btn-lg me-2" %>
+    <%= link_to "Sign in", sign_in_path, class: "btn btn-outline-secondary btn-lg" %>
+  <% end %>
+</div>
+
+<div class="row text-center g-4 py-5 border-top border-bottom my-5">
+  <div class="col-md-4">
+    <div class="mb-3 fs-1">📋</div>
+    <h5 class="fw-semibold">1. Fill in your brief</h5>
+    <p class="text-muted small">Topic, target audience, duration (60, 90, or 120 min), and the outcome you want participants to leave with.</p>
+  </div>
+  <div class="col-md-4">
+    <div class="mb-3 fs-1">⚡</div>
+    <h5 class="fw-semibold">2. Generate the agenda</h5>
+    <p class="text-muted small">One click sends your brief to Gemini, which returns a timed agenda with facilitator notes and one activity per section.</p>
+  </div>
+  <div class="col-md-4">
+    <div class="mb-3 fs-1">🎯</div>
+    <h5 class="fw-semibold">3. Facilitate with confidence</h5>
+    <p class="text-muted small">Review the agenda, adjust anything that doesn't fit your context, export it as plain text, and run the workshop.</p>
+  </div>
+</div>
+
+<div class="row justify-content-center pb-4">
+  <div class="col-md-8">
+    <p class="text-muted text-center small mb-3">Sample output — 90-minute retrospective workshop</p>
+    <div class="card">
+      <div class="card-body p-0">
+        <div class="agenda-section-card card p-3 mb-0 border-0">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="agenda-time-badge">00:00</span>
+            <strong>Welcome and Framing</strong>
+            <span class="badge bg-secondary ms-auto">10 min</span>
+          </div>
+          <p class="text-muted small mb-1"><strong>Facilitator Note:</strong> Welcome participants and set the tone: this is about improving your retro practice, not critiquing past ones.</p>
+          <div class="agenda-activity-box small"><strong>Activity:</strong> Pair share &mdash; each person tells their partner one word that describes their last retrospective.</div>
+        </div>
+        <div class="agenda-section-card card p-3 mb-0 border-0 border-top">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="agenda-time-badge">10:00</span>
+            <strong>What Makes a Retro Work</strong>
+            <span class="badge bg-secondary ms-auto">15 min</span>
+          </div>
+          <p class="text-muted small mb-1"><strong>Facilitator Note:</strong> Share three characteristics of high-impact retros. Keep it to bullet points &mdash; do not lecture.</p>
+          <div class="agenda-activity-box small"><strong>Activity:</strong> Small groups discuss which characteristic their team does well and which they struggle with most.</div>
+        </div>
+        <div class="text-center py-3 text-muted small border-top">
+          &hellip; and 5 more sections &mdash; <% if signed_in? %><%= link_to "create your first workshop", new_workshop_brief_path %><% else %><%= link_to "sign up to generate yours", sign_up_path %><% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

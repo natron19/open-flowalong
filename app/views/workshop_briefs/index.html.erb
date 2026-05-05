@@ -1,0 +1,31 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="mb-0">My Workshops</h1>
+  <%= link_to "New Workshop", new_workshop_brief_path, class: "btn btn-accent" %>
+</div>
+
+<% if @briefs.empty? %>
+  <div class="text-center py-5">
+    <p class="text-muted fs-5 mb-1">You haven't created any workshops yet.</p>
+    <p class="text-muted mb-4">Fill in a brief and get a complete timed agenda in seconds.</p>
+    <%= link_to "Create your first workshop", new_workshop_brief_path, class: "btn btn-accent btn-lg" %>
+  </div>
+<% else %>
+  <div class="row g-3">
+    <% @briefs.each do |brief| %>
+      <div class="col-md-4">
+        <%= link_to brief, class: "text-decoration-none" do %>
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title"><%= brief.topic %></h5>
+              <p class="card-text text-muted small mb-3"><%= brief.audience %></p>
+              <span class="badge bg-secondary"><%= brief.duration_minutes %> min</span>
+            </div>
+            <div class="card-footer text-muted small">
+              Updated <%= time_ago_in_words(brief.updated_at) %> ago
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

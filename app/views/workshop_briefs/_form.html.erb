@@ -1,0 +1,73 @@
+<% if brief.errors.any? %>
+  <div class="alert alert-danger mb-4">
+    <strong><%= pluralize(brief.errors.count, "error") %> prevented this brief from being saved:</strong>
+    <ul class="mb-0 mt-2">
+      <% brief.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: brief do |f| %>
+  <div class="mb-3">
+    <%= f.label :topic, "Workshop Topic", class: "form-label" %>
+    <%= f.text_field :topic, class: "form-control #{"is-invalid" if brief.errors[:topic].any?}",
+        placeholder: "e.g. Psychological Safety in Engineering Teams", required: true %>
+    <% if brief.errors[:topic].any? %>
+      <div class="invalid-feedback"><%= brief.errors[:topic].first %></div>
+    <% end %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :audience, "Target Audience", class: "form-label" %>
+    <%= f.text_field :audience, class: "form-control #{"is-invalid" if brief.errors[:audience].any?}",
+        placeholder: "e.g. Engineering managers and team leads", required: true %>
+    <% if brief.errors[:audience].any? %>
+      <div class="invalid-feedback"><%= brief.errors[:audience].first %></div>
+    <% end %>
+  </div>
+
+  <div class="mb-3" data-controller="duration-selector">
+    <%= f.label :duration_minutes, "Duration", class: "form-label d-block" %>
+    <div class="btn-group" role="group" aria-label="Workshop duration">
+      <% [60, 90, 120].each do |mins| %>
+        <button type="button"
+                class="btn <%= brief.duration_minutes == mins ? "btn-accent active" : "btn-outline-secondary" %>"
+                data-duration-selector-target="button"
+                data-action="click->duration-selector#select"
+                data-value="<%= mins %>">
+          <%= mins %> min
+        </button>
+      <% end %>
+    </div>
+    <%= f.hidden_field :duration_minutes, data: { "duration-selector-target": "input" } %>
+    <% if brief.errors[:duration_minutes].any? %>
+      <div class="text-danger small mt-1"><%= brief.errors[:duration_minutes].first %></div>
+    <% end %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :desired_outcome, "Desired Outcome", class: "form-label" %>
+    <%= f.text_area :desired_outcome, rows: 3,
+        class: "form-control #{"is-invalid" if brief.errors[:desired_outcome].any?}",
+        placeholder: "e.g. Participants leave with two specific team agreements they can implement next week",
+        required: true %>
+    <% if brief.errors[:desired_outcome].any? %>
+      <div class="invalid-feedback"><%= brief.errors[:desired_outcome].first %></div>
+    <% end %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :notes, "Additional Notes", class: "form-label" %>
+    <%= f.text_area :notes, rows: 2, class: "form-control",
+        placeholder: "Optional: facilitator experience level, special constraints, or topics to avoid" %>
+    <div class="form-text">Optional</div>
+  </div>
+
+  <div class="d-flex gap-3 align-items-center">
+    <%= f.submit brief.new_record? ? "Save Brief" : "Update Brief",
+        class: "btn btn-accent" %>
+    <%= link_to "Cancel", workshop_briefs_path, class: "text-muted" %>
+  </div>
+<% end %>

@@ -61,7 +61,7 @@ The agenda generation prompt is stored as data, not code. After `bin/setup`, sig
 | Auth | Rails native (`has_secure_password`, sessions) |
 | CSS | Bootstrap 5 dark mode (CDN) |
 | JavaScript | Stimulus + Turbo via importmap |
-| AI | Google Gemini 2.5 Flash via `gemini-ai` gem |
+| AI | Google Gemini 2.5 Flash via `faraday` (direct REST) |
 | Queue / Cache / Cable | Solid Stack (no Redis) |
 | Testing | RSpec |
 

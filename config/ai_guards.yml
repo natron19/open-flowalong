@@ -1,0 +1,13 @@
+# Per-app guardrail configuration, read by AiGuardConfig.
+# See docs/ai-guardrails.md (Layer 1b: AiOutputGuard) and docs/ai-evals.md.
+
+# Workshop agenda design; personal distress is out of scope.
+crisis_terms: []
+
+# flowalong_agenda_v1 returns a timed Markdown agenda. WorkshopAgendasController
+# stores the text as-is (no JSON parsing), so only the generic output checks apply.
+templates:
+  health_ping:
+    format: text
+  flowalong_agenda_v1:
+    format: text

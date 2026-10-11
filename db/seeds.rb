@@ -36,7 +36,7 @@ end
 puts "Seeded: demo_placeholder_v1 AI template"
 
 # FlowAlong agenda generation template
-AiTemplate.find_or_create_by!(name: "flowalong_agenda_v1") do |t|
+AiTemplate.find_or_initialize_by(name: "flowalong_agenda_v1").tap do |t|
   t.description = "Generates a timed workshop agenda from a brief. Sections must sum to exactly the specified duration."
   t.model = "gemini-2.5-flash"
   t.max_output_tokens = 2500
@@ -59,6 +59,8 @@ AiTemplate.find_or_create_by!(name: "flowalong_agenda_v1") do |t|
     7. Do not include a standalone "introduction to the topic" section unless the user explicitly requests it. Workshop time is for doing, not presenting.
     8. Use the exact Markdown format shown in the user prompt. Do not deviate from the structure.
     9. Do not add any preamble, summary, or commentary outside the agenda structure itself.
+    10. Size each section to its activity: leave enough minutes for instructions, the work itself, and a short debrief. Prefer fewer sections with room to finish over many rushed ones.
+    11. Never design a session that coaches people to intimidate, surveil, deceive, or retaliate against others. That includes finding out who supports a union, pressuring workers on how to vote, or hinting at lost shifts, pay, or jobs. Instead, keep the same format and build the closest lawful session (for example, how supervisors can share the company's view factually while respecting workers' right to organize and avoiding threats, interrogation, surveillance, and promises). The first Facilitator Note must state plainly which requested elements were left out and why.
   PROMPT
 
   t.user_prompt_template = <<~PROMPT
@@ -82,6 +84,7 @@ AiTemplate.find_or_create_by!(name: "flowalong_agenda_v1") do |t|
 
     Start with a Welcome and Framing section. End with a Reflection and Next Steps section. Confirm that all section durations add up to exactly {{duration_minutes}} minutes before you finish.
   PROMPT
+  t.save!
 end
 
 puts "Seeded: flowalong_agenda_v1 AI template"
